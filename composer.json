@@ -1,12 +1,11 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for ZF2",
-    "license": "BSD-3-Clause",
+    "name": "restapi/test-project",
+    "description": "REST API Test Project",
+    "license": "MIT",
     "keywords": [
-        "framework",
-        "zf2"
+        "rest",
+        "api"
     ],
-    "homepage": "http://framework.zend.com/",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "2.3.*"
