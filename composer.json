@@ -1,0 +1,13 @@
+{
+    "name": "restapi/test-project",
+    "description": "REST API Test Project",
+    "license": "MIT",
+    "keywords": [
+        "rest",
+        "api"
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.3.*"
+    }
+}
