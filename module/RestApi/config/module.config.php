@@ -3,7 +3,7 @@ return array(
 
     'controllers' => array(
         'invokables' => array(
-            'ApiRest\Controller\CustomersRest' => 'ApiRest\Controller\CustomersRestController',
+            'RestApi\Controller\CustomersRest' => 'RestApi\Controller\CustomersRestController',
         ),
     ),
     
@@ -18,16 +18,11 @@ return array(
                         'id' => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'ApiRest\Controller\CustomersRest',
+                        'controller' => 'RestApi\Controller\CustomersRest',
                     ),
                 ),
             ),
         ),
-    ),
-    
-    'db' => array(
-        'driver' => 'Pdo_Sqlite',
-        'database' => __DIR__ . '/../data/development.db'
     ),
     
     // Direct JSON, no need for HTML views

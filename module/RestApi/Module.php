@@ -1,8 +1,8 @@
 <?php
-namespace ApiRest;
+namespace RestApi;
 
-use ApiRest\Model\Customer;
-use ApiRest\Model\CustomerTable;
+use RestApi\Model\Customer;
+use RestApi\Model\CustomerTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
  
@@ -31,23 +31,13 @@ class Module
     {
         return array(
             'factories' => array(
-                'db' => function($sm) {
-                    $config = $sm->get('config');
-                    $config = $config['db'];
-                    $dbAdapter = new Adapter($config);
-                    return $dbAdapter;
-                },
-                'ApiRest\Model\CustomerTable' =>  function($sm) {
+                'RestApi\Model\CustomerTable' =>  function($sm) {
                     $tableGateway = $sm->get('CustomerTableGateway');
                     $table = new CustomerTable($tableGateway);
                     return $table;
                 },
                 'CustomerTableGateway' => function ($sm) {
-                    //$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $config = $sm->get('config');
-                    $config = $config['db'];
-                    $dbAdapter = new Adapter($config);
-                    
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Customer());
                     return new TableGateway('customer', $dbAdapter, null, $resultSetPrototype);

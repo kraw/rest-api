@@ -1,12 +1,15 @@
 <?php
 
-namespace ApiRest\Model;
+namespace RestApi\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
+/**
+ * Model Customer to represent the data structure
+ */
 class Customer implements InputFilterAwareInterface
 {
     public $id;
@@ -16,6 +19,10 @@ class Customer implements InputFilterAwareInterface
     public $address;
     protected $inputFilter;
     
+    /**
+     * Provided an input array, it copies its content based on the Customer data structure
+     * @param {Array} $data
+     */
     public function exchangeArray($data)
     {
         // @TODO: refactor this with reflection!! 
@@ -26,16 +33,27 @@ class Customer implements InputFilterAwareInterface
         $this->address    = (isset($data['address']))   ? $data['address']   : null;
     }
     
+    /**
+     * Provides an array representation of this object
+     * @return {Array}
+     */
     public function getArrayCopy()
     {
         return get_object_vars($this);
     }
     
+    /**
+     * Must be implemented, although not used
+     */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
     
+    /**
+     * Sets an input filter so that data model gets validated
+     * @return {Zend\InputFilter\InputFilter}
+     */
     public function getInputFilter()
     {
         if (!$this->inputFilter) {

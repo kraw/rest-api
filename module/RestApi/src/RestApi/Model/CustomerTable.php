@@ -1,5 +1,5 @@
 <?php
-namespace ApiRest\Model;
+namespace RestApi\Model;
 use Zend\Db\TableGateway\TableGateway;
 
 class CustomerTable
