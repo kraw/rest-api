@@ -41,6 +41,7 @@ class CustomerTable
         
         if ($id == 0) {
             $this->tableGateway->insert($data);
+            $id = $this->tableGateway->getLastInsertValue(); //Add this line
         } 
         else {
             if ($this->getCustomer($id)) {
@@ -50,6 +51,8 @@ class CustomerTable
                 throw new \Exception('Customer id does not exist');
             }
         }
+        
+        return $id; // Add Return
     }
     
     public function deleteCustomer($id)

@@ -1,8 +1,8 @@
 <?php
-/*namespace AlbumRestTest\Controller;
+namespace RestApiTest\Controller;
 
-use AlbumRestTest\Bootstrap;
-use AlbumRest\Controller\AlbumRestController;
+use RestApiTest\Bootstrap;
+use RestApi\Controller\CustomersRestController;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
@@ -10,7 +10,7 @@ use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 use PHPUnit_Framework_TestCase;
 
-class AlbumRestControllerTest extends PHPUnit_Framework_TestCase
+class CustomersRestControllerTest extends PHPUnit_Framework_TestCase
 {
     protected $controller;
     protected $request;
@@ -21,7 +21,7 @@ class AlbumRestControllerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $serviceManager = Bootstrap::getServiceManager();
-        $this->controller = new AlbumRestController();
+        $this->controller = new CustomersRestController();
         $this->request    = new Request();
         $this->routeMatch = new RouteMatch(array('controller' => 'index'));
         $this->event      = new MvcEvent();
@@ -55,8 +55,9 @@ class AlbumRestControllerTest extends PHPUnit_Framework_TestCase
     public function testCreateCanBeAccessed()
     {
         $this->request->setMethod('post');
-        $this->request->getPost()->set('artist', 'foo');
-        $this->request->getPost()->set('title', 'bar');
+        
+        $this->request->getPost()->set('firstName', 'Jorge');
+        $this->request->getPost()->set('lastName', 'Albaladejo');
 
         $result   = $this->controller->dispatch($this->request);
         $response = $this->controller->getResponse();
@@ -86,8 +87,8 @@ class AlbumRestControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testGetAlbumTableReturnsAnInstanceOfAlbumTable()
+    public function testGetCustomerTableReturnsAnInstanceOfCustomerTable()
     {
-        $this->assertInstanceOf('Album\Model\AlbumTable', $this->controller->getAlbumTable());
+        $this->assertInstanceOf('RestApi\Model\CustomerTable', $this->controller->getCustomerTable());
     }
-}*/
+}

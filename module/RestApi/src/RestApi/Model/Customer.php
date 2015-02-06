@@ -58,12 +58,12 @@ class Customer implements InputFilterAwareInterface
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
             
-            // ID is required and numeric
+            // ID is numeric, but not required (auto_increment)
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'id',
-                'required' => true,
+                'required' => false,
                 'filters'  => array(
                     array('name' => 'Int'),
                 ),
@@ -71,19 +71,19 @@ class Customer implements InputFilterAwareInterface
             
             // Last name is required and a string between 1 and 20 characters
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'lastName',
+                'name' => 'lastName',
                 'required' => true,
-                'filters'  => array(
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'StringLength',
+                        'name' => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 20,
+                            'min'  => 1,
+                            'max'  => 50,
                         ),
                     ),
                 ),
@@ -91,18 +91,19 @@ class Customer implements InputFilterAwareInterface
             
             // First name is not required, but if present, a string between 1 and 20 characters
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'firstName',
-                'filters'  => array(
+                'name' => 'firstName',
+                'required' => false,
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'StringLength',
+                        'name' => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 20,
+                            'min' => 1,
+                            'max' => 50,
                         ),
                     ),
                 ),
@@ -110,8 +111,9 @@ class Customer implements InputFilterAwareInterface
             
             // Address is not required, but if present, a string between 5 and 255 characters
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'firstName',
-                'filters'  => array(
+                'name' => 'address',
+                'required' => false,
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),

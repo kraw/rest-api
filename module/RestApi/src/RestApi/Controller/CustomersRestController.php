@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
  
 use RestApi\Model\Customer;
 use RestApi\Model\CustomerTable;
+use RestApi\Form\CustomerForm;
 use Zend\View\Model\JsonModel;
  
 class CustomersRestController extends AbstractRestfulController
@@ -20,31 +21,124 @@ class CustomersRestController extends AbstractRestfulController
         }
         
         return new JsonModel(
-            array('data' => $data)
+            array('customers' => $data)
         );
     }
  
     public function get($id)
     {
-        # code...
+        $customer = $this->getCustomerTable()->getCustomer($id);
+        return new JsonModel(
+            array('customer' => $customer)
+        );
     }
  
     public function create($data)
     {
-        # code...
+        $form = new CustomerForm();
+        $customer = new Customer();
+        
+        $form->setInputFilter($customer->getInputFilter());
+        
+        if (!$data)
+        {
+            return new JsonModel(array(
+                'error' => 'empty customer data'
+            ));
+        }
+        
+        $form->setData($data);
+        
+        if ($form->isValid()) {
+            $customer->exchangeArray($form->getData());
+            $id = $this->getCustomerTable()->saveCustomer($customer);
+            
+            return new JsonModel(array(
+                'customer' => $this->getCustomerTable()->getCustomer($id),
+            ));
+        }
+     
+        return new JsonModel(array(
+            'error' => 'input data is not valid'
+        ));
     }
  
     public function update($id, $data)
+    {        
+        if (!$data)
+        {
+            return new JsonModel(array(
+                'error' => 'empty customer data'
+            ));
+        }
+        
+        $data['id'] = $id;
+        
+        $customer = $this->getCustomerTable()->getCustomer($id);
+        $form = new CustomerForm();
+        
+        $form->setInputFilter($customer->getInputFilter());
+        $form->setData($data);
+        
+        // In this case, the form is bound, so there is no need to manually update it
+        if ($form->isValid()) {
+            $customer->exchangeArray($form->getData());
+            $id = $this->getCustomerTable()->saveCustomer($customer);
+                  
+            return new JsonModel(array(
+                'customer' => $this->getCustomerTable()->getCustomer($id),
+            ));
+        }
+     
+        return new JsonModel(array(
+            'error' => 'input data is not valid'
+        ));
+    }
+    
+    // @TODO: 
+    public function patch($id, $data)
     {
         # code...
     }
  
     public function delete($id)
     {
-        # code...
+        $this->getCustomerTable()->deleteCustomer($id);
+  
+        return new JsonModel(array(
+            'data' => 'deleted',
+        ));
     }
     
-    public function getCustomerTable()
+    public function options()
+    {
+        $response = $this->getResponse();
+        $headers  = $response->getHeaders();
+
+        // If you want to vary based on whether this is a collection or an
+        // individual item in that collection, check if an identifier from
+        // the route is present
+        if ($this->params()->fromRoute('id', false)) {
+            // Allow viewing, partial updating, replacement, and deletion
+            // on individual items
+            $headers->addHeaderLine('Allow', implode(',', array(
+                'GET',
+                'PATCH',
+                'PUT',
+                'DELETE',
+            )));
+            return $response;
+        }
+
+        // Allow only retrieval and creation on collections
+        $headers->addHeaderLine('Allow', implode(',', array(
+            'GET',
+            'POST',
+        )));
+        return $response;
+    }
+    
+    protected function getCustomerTable()
     {
         if (!$this->customerTable) {
             $sm = $this->getServiceLocator();
@@ -52,73 +146,4 @@ class CustomersRestController extends AbstractRestfulController
         }
         return $this->customerTable;
     }
-    
-    /*
-     
-     public function get($id)
-    {
-        $album = $this->getAlbumTable()->getAlbum($id);
-
-        return new JsonModel(array(
-            'data' => $album,
-        ));
-    }
-
-    public function create($data)
-    {
-        $form = new AlbumForm();
-        $album = new Album();
-        $form->setInputFilter($album->getInputFilter());
-        $form->setData($data);
-        if ($form->isValid()) {
-            $album->exchangeArray($form->getData());
-            $id = $this->getAlbumTable()->saveAlbum($album);
-        }
-        
-        return $this->get($id);
-    }
-
-    public function update($id, $data)
-    {
-        $data['id'] = $id;
-        $album = $this->getAlbumTable()->getAlbum($id);
-        $form  = new AlbumForm();
-        $form->bind($album);
-        $form->setInputFilter($album->getInputFilter());
-        $form->setData($data);
-        if ($form->isValid()) {
-            $id = $this->getAlbumTable()->saveAlbum($form->getData());
-        }
-
-        return $this->get($id);
-    }
-
-    public function delete($id)
-    {
-        $this->getAlbumTable()->deleteAlbum($id);
-
-        return new JsonModel(array(
-            'data' => 'deleted',
-        ));
-    }
-
-    public function getAlbumTable()
-    {
-        if (!$this->albumTable) {
-            $sm = $this->getServiceLocator();
-            $this->albumTable = $sm->get('Album\Model\AlbumTable');
-        }
-        return $this->albumTable;
-    }
-    
-    public function getCustomerTable()
-    {
-        if (!$this->customerTable) {
-            $sm = $this->getServiceLocator();
-            $this->customerTable = $sm->get('Album\Model\CustomerTable');
-        }
-        return $this->customerTable;
-    } 
-    
-     */
 }
