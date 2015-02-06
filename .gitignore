@@ -30,3 +30,4 @@ nbproject
 .settings
 composer.lock
 vendor/bin
+phpunit.phar
