@@ -1,6 +1,6 @@
 <?php
 
-namespace RestApi\Model;
+namespace RestApiTest\Model;
 
 use Zend\Db\ResultSet\ResultSet;
 use PHPUnit_Framework_TestCase;
@@ -16,7 +16,7 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
                          ->with()
                          ->will($this->returnValue($resultSet));
 
-        $customerTable = new CustomerTable($mockTableGateway);
+        $customerTable = new \RestApi\Model\CustomerTable($mockTableGateway);
 
         $this->assertSame($resultSet, $customerTable->fetchAll());
     }

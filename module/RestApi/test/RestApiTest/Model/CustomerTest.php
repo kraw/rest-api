@@ -1,6 +1,6 @@
 <?php
 
-namespace RestApi\Model;
+namespace RestApiTest\Model;
 
 use RestApi\Model\Customer;
 use PHPUnit_Framework_TestCase;
