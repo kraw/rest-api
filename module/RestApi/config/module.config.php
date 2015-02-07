@@ -4,12 +4,23 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'RestApi\Controller\CustomersRest' => 'RestApi\Controller\CustomersRestController',
+            'RestApi\Controller\CustomerSearchRest' => 'RestApi\Controller\CustomerSearchRestController',
         ),
     ),
     
     // REST routes
     'router' => array(
         'routes' => array(
+            'search' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/customers/search',
+                    'verb' => 'get',
+                    'defaults' => array(
+                        'controller' => 'RestApi\Controller\CustomerSearchRest',
+                    )
+                )
+            ),          
             'api-rest' => array(
                 'type' => 'segment',
                 'options' => array(
