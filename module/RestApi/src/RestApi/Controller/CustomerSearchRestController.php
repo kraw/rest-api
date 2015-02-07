@@ -1,17 +1,11 @@
 <?php
 namespace RestApi\Controller;
- 
-use Zend\Mvc\Controller\AbstractRestfulController;
- 
-use RestApi\Model\Customer;
-use RestApi\Model\CustomerTable;
-use RestApi\Form\CustomerForm;
-use Zend\View\Model\JsonModel;
- 
-class CustomerSearchRestController extends AbstractRestfulController
-{
-    protected $customerTable;
 
+use RestApi\Controller\ParentController;
+use Zend\View\Model\JsonModel;
+
+class CustomerSearchRestController extends ParentController
+{
     /**
      * The default action when calling GET on this controller is the search itself
      */
@@ -55,15 +49,6 @@ class CustomerSearchRestController extends AbstractRestfulController
             'GET'
         )));
         return $response;
-    }
-    
-    protected function getCustomerTable()
-    {
-        if (!$this->customerTable) {
-            $sm = $this->getServiceLocator();
-            $this->customerTable = $sm->get('RestApi\Model\CustomerTable');
-        }
-        return $this->customerTable;
     }
     
 }
