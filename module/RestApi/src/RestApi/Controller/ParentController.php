@@ -49,6 +49,7 @@ class ParentController extends AbstractRestfulController
 
     /**
      * Will check the HTTP verb before processing the request
+     * @param {Zend\EventManager\EventManagerInterface}
      */
     public function setEventManager(EventManagerInterface $events)
     {
@@ -58,6 +59,7 @@ class ParentController extends AbstractRestfulController
 
     /**
      * Return a 405 error if the method (verb) is not allowed
+     * @param {Zend\EventManager\EventManagerInterface}
      */
     public function checkOptions($e)
     {
