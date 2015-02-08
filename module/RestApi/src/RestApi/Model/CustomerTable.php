@@ -1,6 +1,8 @@
 <?php
 namespace RestApi\Model;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Predicate\Expression;
 
 class CustomerTable
 {
@@ -58,5 +60,24 @@ class CustomerTable
     public function deleteCustomer($id)
     {
         $this->tableGateway->delete(array('id' => $id));
+    }
+    
+    public function search($params)
+    {
+        $id = $params['id'];
+        $lastName = $params['lastName'];
+        $email = $params['email'];
+        
+        $where = array();
+        
+        if ($id > 0) $where['id'] = $id;
+        if ($email != null && $email != '') $where['email'] = $email;
+        if ($lastName != null && $lastName != '') $where[] = new Expression("lastName LIKE '%$lastName%'");
+                
+        $rowset = $this->tableGateway->select(function (Select $select) use ($where){          
+            $select->where($where);
+        });
+        
+        return $rowset;
     }
 }
