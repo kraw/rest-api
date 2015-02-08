@@ -63,6 +63,8 @@ class CustomersRestController extends ParentController
             // I'm keeping it simple.
             if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
                 $response->setStatusCode(401);
+                // Let browsers know that Token is the preferred authentication method
+                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
                 return $response;
             }
         }
