@@ -4,8 +4,20 @@ namespace RestApi\Controller;
 use RestApi\Controller\ParentController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Manages the search action on the customer collection.
+ */
 class CustomerSearchRestController extends ParentController
 {
+  
+    /**
+     * @Override
+     * Only allow the search itself: a GET action on the collection.
+     */
+    protected $allowedCollectionMethods = array(
+        'GET'
+    );
+    
     /**
      * The default action when calling GET on this controller is the search itself
      */
@@ -37,18 +49,6 @@ class CustomerSearchRestController extends ParentController
         return new JsonModel(
             array('customers' => $data)
         );
-    }
-    
-    public function options()
-    {
-        $response = $this->getResponse();
-        $headers  = $response->getHeaders();
-
-        // Allow only retrieval and creation on collections
-        $headers->addHeaderLine('Allow', implode(',', array(
-            'GET'
-        )));
-        return $response;
     }
     
 }

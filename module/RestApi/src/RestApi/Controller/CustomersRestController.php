@@ -5,9 +5,16 @@ use RestApi\Form\CustomerForm;
 use RestApi\Controller\ParentController;
 use Zend\View\Model\JsonModel;
 use RestApi\Model\Customer;
- 
+
+/**
+ * Manages the Customers entities by interfacing the model and table gateway actions.
+ * Provides basic CRUD functionality.
+ */
 class CustomersRestController extends ParentController
-{    
+{
+    /**
+     * CRUD: index (list)
+     */    
     public function getList()
     {
         $results = $this->getCustomerTable()->fetchAll();
@@ -21,6 +28,9 @@ class CustomersRestController extends ParentController
         );
     }
  
+    /**
+     * CRUD: Read
+     */
     public function get($id)
     {
         $customer = $this->getCustomerTable()->getCustomer($id);
@@ -29,6 +39,9 @@ class CustomersRestController extends ParentController
         );
     }
  
+    /**
+     * CRUD: Create
+     */
     public function create($data)
     {
         $form = new CustomerForm();
@@ -59,6 +72,9 @@ class CustomersRestController extends ParentController
         ));
     }
  
+    /**
+     * CRUD: Update
+     */
     public function update($id, $data)
     {        
         if (!$data)
@@ -91,12 +107,16 @@ class CustomersRestController extends ParentController
         ));
     }
     
-    // @TODO: 
-    public function patch($id, $data)
-    {
-        # code...
-    }
+    /**
+     * @TODO: PATCH is used for partial updates.
+     *        I didn't find it interesting to implement right now, so it's pending for a further version.
+     *        PATCH is not yet supported nor offered through the OPTIONS method.
+     */ 
+    public function patch($id, $data){}
  
+    /**
+     * CRUD: Delete
+     */
     public function delete($id)
     {
         $this->getCustomerTable()->deleteCustomer($id);
@@ -104,34 +124,6 @@ class CustomersRestController extends ParentController
         return new JsonModel(array(
             'data' => 'deleted',
         ));
-    }
-    
-    public function options()
-    {
-        $response = $this->getResponse();
-        $headers  = $response->getHeaders();
-
-        // If you want to vary based on whether this is a collection or an
-        // individual item in that collection, check if an identifier from
-        // the route is present
-        if ($this->params()->fromRoute('id', false)) {
-            // Allow viewing, partial updating, replacement, and deletion
-            // on individual items
-            $headers->addHeaderLine('Allow', implode(',', array(
-                'GET',
-                'PATCH',
-                'PUT',
-                'DELETE',
-            )));
-            return $response;
-        }
-
-        // Allow only retrieval and creation on collections
-        $headers->addHeaderLine('Allow', implode(',', array(
-            'GET',
-            'POST',
-        )));
-        return $response;
     }
     
 }
