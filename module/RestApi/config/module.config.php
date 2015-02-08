@@ -42,4 +42,18 @@ return array(
             'ViewJsonStrategy',
         ),
     ),
+    
+    // DB access; I tried to put it in a global.php file but it wouldnt't get loaded!
+    'db' => array(
+        'driver' => 'Pdo_Sqlite',
+        'database' => __DIR__ . '/../data/db/restapi.db'
+    ),
+    
+    // Will create objects like models and tablegateways
+    'service_manager' => array(
+        'factories' => array(
+            'Zend\Db\Adapter\Adapter'
+                    => 'Zend\Db\Adapter\AdapterServiceFactory',
+        ),
+    ),
 );
