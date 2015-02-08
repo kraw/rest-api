@@ -87,8 +87,4 @@ class CustomersRestControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testGetCustomerTableReturnsAnInstanceOfCustomerTable()
-    {
-        $this->assertInstanceOf('RestApi\Model\CustomerTable', $this->controller->getCustomerTable());
-    }
 }
