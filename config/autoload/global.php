@@ -10,16 +10,10 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-
 return array(
     'db' => array(
-        'driver'         => 'Pdo',
-        'dsn'            => 'mysql:dbname=restapi;host=localhost',
-        'driver_options' => array(
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-        ),
-        /*'driver' => 'Pdo_Sqlite',
-        'database' => '/../data/db/development.db'*/
+        'driver' => 'Pdo_Sqlite',
+        'database' => __DIR__ . '/../../data/db/restapi.db'
     ),
     
     'service_manager' => array(
