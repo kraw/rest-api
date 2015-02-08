@@ -56,9 +56,12 @@ class CustomersRestController extends ParentController
         // We matched a collection; test if we allow the particular request method
         if (in_array($method, $this->restrictedMethods)) {
           
-            $token = $request->getHeaders()->get('Authentication')->getFieldValue();
+            $tokenHeader = $request->getHeaders()->get('Authentication')->getFieldValue();
             
-            if ($token != 'Token ' . $this->restrictedToken) {
+            // This is not very robust; I should parse the header line instead;
+            // However, and since the result will be the same in this example,
+            // I'm keeping it simple.
+            if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
                 $response->setStatusCode(401);
                 return $response;
             }
