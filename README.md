@@ -16,4 +16,4 @@ A demo interface have been provided from which you will be able to test the REST
 2. Not implemented HTTP verbs will produce a 405 error code.
 3. The authentication protocol I implemented is very simplistic: the Token header as it is used by the Ruby on Rails framework.
 4. To validate the POST and PUT input when creating and updating customers, I had to make the data go through a Form class so that it would get filtered and validated. This feels rather cumbersome to me, and although I didn't find a reason to do it this way, I kept it since it is the recommended method according to the Zend documentation.
-5. I have provided some unit tests to showcase the feature, but they are not complete. To run them, go to `/module/RestApi/test` and run 'phpunit`. 
+5. I have provided some unit tests to showcase the feature, but they are not complete. To run them, go to `/module/RestApi/test` and run `phpunit`. 
