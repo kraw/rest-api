@@ -56,17 +56,22 @@ class CustomersRestController extends ParentController
         // We matched a collection; test if we allow the particular request method
         if (in_array($method, $this->restrictedMethods)) {
           
-            $tokenHeader = $request->getHeaders()->get('Authentication')->getFieldValue();
-            
-            // This is not very robust; I should parse the header line instead;
-            // However, and since the result will be the same in this example,
-            // I'm keeping it simple.
-            if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
-                $response->setStatusCode(401);
-                // Let browsers know that Token is the preferred authentication method
-                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
-                return $response;
+            $header = $request->getHeaders()->get('Authentication');
+          
+            if ($header != null) {
+                $tokenHeader = $header->getFieldValue();
+                
+                // This is not very robust; I should parse the header line instead;
+                // However, and since the result will be the same in this example,
+                // I'm keeping it simple.
+                if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
+                    $response->setStatusCode(401);
+                    // Let browsers know that Token is the preferred authentication method
+                    $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
+                    return $response;
+                }
             }
+                
         }
     } 
   
@@ -91,7 +96,14 @@ class CustomersRestController extends ParentController
      */
     public function get($id)
     {
-        $customer = $this->getCustomerTable()->getCustomer($id);
+        $customer = $this->getCustomerTable()->getCustomer($id); 
+        
+        if ($customer == null) {
+            $response = $this->getResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+        
         return new JsonModel(
             array('customer' => $customer)
         );
@@ -145,6 +157,13 @@ class CustomersRestController extends ParentController
         $data['id'] = $id;
         
         $customer = $this->getCustomerTable()->getCustomer($id);
+        
+        if ($customer == null) {
+            $response = $this->getResponse();
+            $response->setStatusCode(404);
+            return $response;
+        }
+        
         $form = new CustomerForm();
         
         $form->setInputFilter($customer->getInputFilter());

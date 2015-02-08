@@ -25,7 +25,7 @@ class CustomerTable
         $rowset = $this->tableGateway->select(array('id' => $id));
         $row = $rowset->current();
         if (!$row) {
-            throw new \Exception("Could not find row $id");
+            return null;
         }
         return $row;
     }
@@ -50,7 +50,7 @@ class CustomerTable
                 $this->tableGateway->update($data, array('id' => $id));
             } 
             else {
-                throw new \Exception('Customer id does not exist');
+                return null;
             }
         }
         
