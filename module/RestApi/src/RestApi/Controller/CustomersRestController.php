@@ -1,9 +1,11 @@
 <?php
 namespace RestApi\Controller;
  
+use Zend\View\Model\JsonModel;
+use Zend\EventManager\EventManagerInterface;
+
 use RestApi\Form\CustomerForm;
 use RestApi\Controller\ParentController;
-use Zend\View\Model\JsonModel;
 use RestApi\Model\Customer;
 
 /**
@@ -13,9 +15,65 @@ use RestApi\Model\Customer;
 class CustomersRestController extends ParentController
 {
     /**
+     * Methods that are non idempotent (they operate on data), are restricted.
+     * They will require an access token.
+     */
+    protected $restrictedMethods = array(
+        'POST',
+        'PUT',
+        'DELETE'
+    );
+  
+    /**
+     * This token is hardcoded to showcase the authentication feature in a simple way.
+     * Ideally, I would use Basic Auth, or DB-based authentication, or even OAuth.
+     * In any case, this token should be in a configuration file, but since its scope
+     *     limits to this controller, I left it here for simplicity.
+     */
+    protected $restrictedToken = 'fooToken123';
+    
+    /**
+     * Will check the access token for restricted methods
+     * @param {Zend\EventManager\EventManagerInterface}
+     */
+    public function setEventManager(EventManagerInterface $events)
+    {
+        // The parent will already forbit unallowed methods
+        parent::setEventManager($events);
+        
+        $events->attach('dispatch', array($this, 'checkAccess'), 10);
+    }
+    
+    /**
+     * @param {Zend\EventManager\EventManagerInterface}
+     */
+    public function checkAccess($e)
+    {
+        $response = $e->getResponse();
+        $request  = $e->getRequest();
+        $method   = $request->getMethod();
+        
+        // We matched a collection; test if we allow the particular request method
+        if (in_array($method, $this->restrictedMethods)) {
+          
+            $tokenHeader = $request->getHeaders()->get('Authentication')->getFieldValue();
+            
+            // This is not very robust; I should parse the header line instead;
+            // However, and since the result will be the same in this example,
+            // I'm keeping it simple.
+            if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
+                $response->setStatusCode(401);
+                // Let browsers know that Token is the preferred authentication method
+                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
+                return $response;
+            }
+        }
+    } 
+  
+    /**
      * CRUD: index (list)
      */    
-    public function getList()
+    public function getList() 
     {
         $results = $this->getCustomerTable()->fetchAll();
         $data = array();
