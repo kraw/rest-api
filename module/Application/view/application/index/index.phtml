@@ -1,6 +1,8 @@
 <div class="jumbotron">
     <h1>REST API demo</h1>
     <p>This is a simple interface to showcase the methods available in the REST API.</p>
+    <p class="small">Some non-idempotent methods (POST, PUT, DELETE) require an access token.<br>
+      You can play with it to test authentication: <input id="access-token" class="small"></input> </p>
 </div>
 
 <div class="row">
@@ -30,14 +32,7 @@
             <div class="panel-body">
                 <p><code>POST /customers</code></p>
                 <p><strong>Parameters:</strong>
-<pre>
-{
-    "firstName": "Foo First Name",
-    "lastName": "Foo Last Name",
-    "address": "Foo Address",
-    "email": "foo@email.com"
-}
-</pre>
+                <textarea id="create-payload"></textarea>
                 </p>
                 <p class="response-wrapper hidden">
                     <strong>Response:</strong>
@@ -75,14 +70,7 @@
             <div class="panel-body">
                 <p><code>PUT /customers/<input id="update-customer-id" placeholder=":id"></input></code></p>
                 <p><strong>Parameters:</strong>
-<pre>
-{
-    "firstName": "Foo First Name",
-    "lastName": "Foo Last Name",
-    "address": "Foo Address",
-    "email": "foo@email.com"
-}
-</pre>
+                <textarea id="update-payload"></textarea>
                 </p>
                 <p class="response-wrapper hidden">
                     <strong>Response:</strong>

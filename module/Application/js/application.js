@@ -5,13 +5,15 @@ var customer = {
   email: 'foo@email.com'
 };
 
-var updatedCustomer = {
-  firstName: 'Updated First Name'
-};
-
-var accessToken = 'Token token="fooToken123"';
+var accessToken = 'fooToken123';
+var accessTokenString = 'Token token="{0}"';
 
 $(document).ready(function () {
+  
+  // Fill textareas on initialization
+  $('#create-payload').val(JSON.stringify(customer, undefined, 2));
+  $('#update-payload').val(JSON.stringify(customer, undefined, 2));
+  $('#access-token').val(accessToken);
 
   // get a collection
   $('#get-list a').click(function (ev) {
@@ -60,15 +62,24 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var $placeholder = $('#create .response-placeholder');
+    var data = {};
+    
+    try{
+      data = JSON.parse($('#create-payload').val());
+    }
+    catch(e){
+      alert('Incorrect JSON format!');
+      return;
+    }
     
     $('#create .hidden').removeClass('hidden');
       
     $.ajax({
       url: 'customers',
       type: 'post',
-      data: customer,
+      data: data,
       headers: {
-          Authentication: accessToken
+          Authentication: accessTokenString.format($('#access-token').val())
       },
       dataType: 'json',
       success: function (data, status, response) {
@@ -90,18 +101,25 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var id = parseInt($('#update-customer-id').val()) || 0;
-    var $placeholder = $('#update .response-placeholder');
+    var $placeholder = $('#update .response-placeholder');    
+    var data = {};
+    
+    try{
+      data = JSON.parse($('#update-payload').val());
+    }
+    catch(e){
+      alert('Incorrect JSON format!');
+      return;
+    }
     
     $('#update .hidden').removeClass('hidden');
 
     $.ajax({
       url: 'customers/' + id,
-      data: $.extend({}, customer, updatedCustomer, {
-        address: new Date ().getTime()
-      }),
+      data: data,
       type: 'PUT',
       headers: {
-          Authentication: accessToken
+          Authentication: accessTokenString.format($('#access-token').val())
       },
       dataType: "json",
       success: function (data, status, response) {
@@ -130,7 +148,7 @@ $(document).ready(function () {
       url: 'customers/' + id,
       type: 'DELETE',
       headers: {
-          Authentication: accessToken
+          Authentication: accessTokenString.format($('#access-token').val())
       },
       success: function (data, status, response) {
         $placeholder.html('<strong>{0} {1}</strong>'.format(response.status, response.statusText));
