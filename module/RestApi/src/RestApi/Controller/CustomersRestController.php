@@ -196,11 +196,17 @@ class CustomersRestController extends ParentController
      */
     public function delete($id)
     {
-        $this->getCustomerTable()->deleteCustomer($id);
+        $response = $this->getResponse();
+        $deleted = $this->getCustomerTable()->deleteCustomer($id);        
+
+        if ($deleted == 0) {            
+            $response->setStatusCode(404);
+            return $response;    
+        }
   
-        return new JsonModel(array(
-            'data' => 'deleted',
-        ));
+        // No content for the browser
+        $response->setStatusCode(204);
+        return $response;  
     }
     
 }

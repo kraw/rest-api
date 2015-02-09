@@ -59,7 +59,7 @@ class CustomerTable
     
     public function deleteCustomer($id)
     {
-        $this->tableGateway->delete(array('id' => $id));
+        return $this->tableGateway->delete(array('id' => $id));
     }
     
     public function search($params)
