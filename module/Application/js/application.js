@@ -109,6 +109,31 @@ $(document).ready(function () {
       }
     });
   });
+  
+  // search customers
+  $('#search a').click(function (ev) {
+    ev.preventDefault();
+    
+    var $placeholder = $('#search .response-placeholder');
+    var data = {};
+    
+    if ($('#search-id').val()) data.customerId = $('#search-id').val();
+    if ($('#search-lastname').val()) data.lastName = $('#search-lastname').val();
+    if ($('#search-email').val()) data.email = $('#search-email').val();
+    
+    console.log(data);
+
+    $.get('customers/search', data)
+      .success(function (data, status, response) {
+        $placeholder.html('<strong>{0} {1}</strong><br>{2}'.format(
+          response.status, 
+          response.statusText, 
+          JSON.stringify(data, undefined, 2)
+        ));
+      });
+
+    ev.preventDefault();
+  });
 
 });
 
