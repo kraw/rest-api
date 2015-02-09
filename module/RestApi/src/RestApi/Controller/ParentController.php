@@ -70,7 +70,7 @@ class ParentController extends AbstractRestfulController
 
         // test if we matched an individual resource, and then test
         // if we allow the particular request method
-        if ($matches->getParam('id', false)) {
+        if ($matches->getParam('id') != null) {
             if (!in_array($method, $this->allowedResourceMethods)) {
                 $response->setStatusCode(405);
                 return $response;
@@ -83,6 +83,8 @@ class ParentController extends AbstractRestfulController
             $response->setStatusCode(405);
             return $response;
         }
+        
+        
     }
     
     /**
