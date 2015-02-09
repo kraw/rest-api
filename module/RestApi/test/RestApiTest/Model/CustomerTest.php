@@ -72,25 +72,4 @@ class CustomerTest extends PHPUnit_Framework_TestCase
             $this->assertNull($customer->$field, '"' . $field . '" should have defaulted to null');
         }
     }
-    
-    // @TODO
-    public function testFirstNameValidates()
-    {
-      
-    }
-    
-    public function testLastNameValidates()
-    {
-      
-    }
-    
-    public function testAddressValidates()
-    {
-      
-    }
-    
-    public function testEmailValidates()
-    {
-      
-    }
 }
