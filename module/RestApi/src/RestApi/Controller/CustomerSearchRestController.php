@@ -31,8 +31,8 @@ class CustomerSearchRestController extends ParentController
         $customer = new Customer();
         $form = new SearchForm();
         
-        // @TODO: This input should be sanitized, since I'm not 100% that ZF2 is doing that
-        //        I am skipping this right now to focus on the functionality instead.
+        // Using 'id' as a query parameter would result in a Zend error; 
+        // I have mapped it to 'customerId' for simplicity.
         $inputData = array( 
             'id' => (int)$request->getQuery('customerId'),
             'lastName' => $request->getQuery('lastName'),
