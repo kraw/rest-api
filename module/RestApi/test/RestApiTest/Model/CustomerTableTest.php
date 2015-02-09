@@ -3,14 +3,20 @@
 namespace RestApiTest\Model;
 
 use Zend\Db\ResultSet\ResultSet;
-use PHPUnit_Framework_TestCase;
 
-class CustomerTableTest extends PHPUnit_Framework_TestCase
+use RestApi\Model\Customer;
+use RestApi\Model\CustomerTable;
+use RestApiTest\ParentTestCase;
+
+class CustomerTableTest extends ParentTestCase
 {
+    /**
+     * Tests RestApi\Model\CustomerTable::fetchAll()
+     */
     public function testFetchAllReturnsAllCustomer()
     {
         $resultSet        = new ResultSet();
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('select'), array(), '', false);
+        $mockTableGateway = $this->getMockTableGateway('select');
         $mockTableGateway->expects($this->once())
                          ->method('select')
                          ->with()
@@ -20,104 +26,98 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($resultSet, $customerTable->fetchAll());
     }
-    /*
-    public function testCanRetrieveAnAlbumByItsId()
+    
+    /**
+     * Tests RestApi\Model\CustomerTable::getCustomer($id)
+     */
+    public function testCanRetrieveCustomerByItsId()
     {
-        $album = new Album();
-        $album->exchangeArray(array('id'     => 123,
-                                    'artist' => 'The Military Wives',
-                                    'title'  => 'In My Dreams'));
-
+        // Prepare a mock customer
+        $customer = $this->getMockCustomer();
+        
+        // Now prepare a mock resultset
         $resultSet = new ResultSet();
-        $resultSet->setArrayObjectPrototype(new Album());
-        $resultSet->initialize(array($album));
-
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('select'), array(), '', false);
+        $resultSet->setArrayObjectPrototype(new Customer());
+        $resultSet->initialize(array($customer));
+        
+        // Mock the table gateway's behavior
+        $mockTableGateway = $this->getMockTableGateway('select');
+        
+        // Assert that select method will be called with ID 123        
         $mockTableGateway->expects($this->once())
                          ->method('select')
                          ->with(array('id' => 123))
                          ->will($this->returnValue($resultSet));
-
-        $albumTable = new AlbumTable($mockTableGateway);
-
-        $this->assertSame($album, $albumTable->getAlbum(123));
+        
+        // And call customerTable's method with the mocked gateway
+        $customerTable = new CustomerTable($mockTableGateway);
+        $this->assertSame($customer, $customerTable->getCustomer(123));
     }
 
-    public function testCanDeleteAnAlbumByItsId()
+    /**
+     * Tests RestApi\Model\CustomerTable::deleteCustomer($id)
+     */
+    public function testCanDeleteCustomerByItsId()
     {
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('delete'), array(), '', false);
+        // Mock a table gateway so that it will expect a call on 'delete' with id 123
+        $mockTableGateway = $this->getMockTableGateway('delete');
+        
+        // This is an assertion, actually
         $mockTableGateway->expects($this->once())
                          ->method('delete')
                          ->with(array('id' => 123));
-
-        $albumTable = new AlbumTable($mockTableGateway);
-        $albumTable->deleteAlbum(123);
+                         
+        // Initialize and run
+        $customerTable = new CustomerTable($mockTableGateway);
+        $customerTable->deleteCustomer(123);
     }
-
-    public function testSaveAlbumWillInsertNewAlbumsIfTheyDontAlreadyHaveAnId()
+    
+    /**
+     * Tests RestApi\Model\CustomerTable::saveCustomer() - create
+     */
+    public function testSaveCustomerWillCreateIfItDoesNotHaveAnId()
     {
-        $albumData = array('artist' => 'The Military Wives', 'title' => 'In My Dreams');
-        $album     = new Album();
-        $album->exchangeArray($albumData);
-
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('insert'), array(), '', false);
+        $customerData = $this->getMockCustomerData();
+        $mockTableGateway = $this->getMockTableGateway('insert');
+                         
+        // No ID for our customer
+        unset($customerData['id']);
+        $customer = new Customer();        
+        $customer->exchangeArray($customerData);
+        
+        // Assert that the insert method will be called with fake customer data
         $mockTableGateway->expects($this->once())
                          ->method('insert')
-                         ->with($albumData);
-
-        $albumTable = new AlbumTable($mockTableGateway);
-        $albumTable->saveAlbum($album);
+                         ->with($customerData);
+                         
+        $customerTable = new CustomerTable($mockTableGateway);
+        $id = $customerTable->saveCustomer($customer);
     }
-
-    public function testSaveAlbumWillUpdateExistingAlbumsIfTheyAlreadyHaveAnId()
+    
+    public function testSaveCustomerWillUpdateIfItHasAnId()
     {
-        $albumData = array('id' => 123, 'artist' => 'The Military Wives', 'title' => 'In My Dreams');
-        $album     = new Album();
-        $album->exchangeArray($albumData);
-
+        $customer = $this->getMockCustomer();
+        $customerData = $this->getMockCustomerData();
+        $mockTableGateway = $this->getMockTableGateway(array('select', 'update'));
+        
         $resultSet = new ResultSet();
-        $resultSet->setArrayObjectPrototype(new Album());
-        $resultSet->initialize(array($album));
-
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway',
-                                           array('select', 'update'), array(), '', false);
+        $resultSet->setArrayObjectPrototype(new Customer());
+        $resultSet->initialize(array($customer));
+        
+        // Assert that the insert method will be called with fake customer data                         
         $mockTableGateway->expects($this->once())
                          ->method('select')
                          ->with(array('id' => 123))
                          ->will($this->returnValue($resultSet));
+
+        // The 'update' method in the gateway will expect a customer array without the ID
+        unset($customerData['id']);
         $mockTableGateway->expects($this->once())
                          ->method('update')
-                         ->with(array('artist' => 'The Military Wives', 'title' => 'In My Dreams'),
-                                array('id' => 123));
-
-        $albumTable = new AlbumTable($mockTableGateway);
-        $albumTable->saveAlbum($album);
+                         ->with($customerData, array('id' => 123));
+                         
+        $customerTable = new CustomerTable($mockTableGateway);
+        $customerTable->saveCustomer($customer);
     }
-
-    public function testExceptionIsThrownWhenGettingNonexistentAlbum()
-    {
-        $resultSet = new ResultSet();
-        $resultSet->setArrayObjectPrototype(new Album());
-        $resultSet->initialize(array());
-
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('select'), array(), '', false);
-        $mockTableGateway->expects($this->once())
-                         ->method('select')
-                         ->with(array('id' => 123))
-                         ->will($this->returnValue($resultSet));
-
-        $albumTable = new AlbumTable($mockTableGateway);
-
-        try
-        {
-            $albumTable->getAlbum(123);
-        }
-        catch (\Exception $e)
-        {
-            $this->assertSame('Could not find row 123', $e->getMessage());
-            return;
-        }
-
-        $this->fail('Expected exception was not thrown');
-    }*/
+    
 }

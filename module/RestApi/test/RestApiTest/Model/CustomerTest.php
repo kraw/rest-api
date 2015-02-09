@@ -3,38 +3,15 @@
 namespace RestApiTest\Model;
 
 use RestApi\Model\Customer;
-use PHPUnit_Framework_TestCase;
+use RestApiTest\ParentTestCase;
 
-class CustomerTest extends PHPUnit_Framework_TestCase
+class CustomerTest extends ParentTestCase
 {
     /**
      * Used to automate tests by code reflection
      * @type {Array}
      */
     protected $fields = array('id', 'firstName', 'lastName', 'address', 'email');
-    
-    /**
-     * A useful mock used to automate customer initialization
-     * @type {Array}
-     */
-    protected $mockData = array(
-        'id'     => 1,
-        'firstName' => 'Jorge',
-        'lastName'  => 'Albaladejo',
-        'address'   => 'Rue de Lausanne, Renens, Switzerland',
-        'email'     => 'correo@jorgealbaladejo.com'            
-    );
-    
-    /**
-     * Produces a mock customer with some predefined values (for DRY purposes)
-     * @return {RestApi\Model\Customer}
-     */
-    protected function mockCustomer()
-    {
-        $customer = new Customer();        
-        $customer->exchangeArray($this->mockData);        
-        return $customer;
-    }
     
     /*
      * Test cases
@@ -52,17 +29,18 @@ class CustomerTest extends PHPUnit_Framework_TestCase
     
     public function testExchangeArraySetsPropertiesCorrectly()
     {
-        $customer = $this->mockCustomer();
+        $customer = $this->getMockCustomer();
+        $mockData = $this->getMockCustomerData();
         
         foreach ($this->fields as $field) 
         {
-            $this->assertSame($this->mockData[$field], $customer->$field, '"' . $field . '" was not set correctly');
+            $this->assertSame($mockData[$field], $customer->$field, '"' . $field . '" was not set correctly');
         }
     }
     
     public function testExchangeArraySetsPropertiesToNullIfKeysAreNotPresent()
     {
-        $customer = $this->mockCustomer();
+        $customer = $this->getMockCustomer();
         
         // now reset its values
         $customer->exchangeArray(array());
@@ -71,26 +49,5 @@ class CustomerTest extends PHPUnit_Framework_TestCase
         {
             $this->assertNull($customer->$field, '"' . $field . '" should have defaulted to null');
         }
-    }
-    
-    // @TODO
-    public function testFirstNameValidates()
-    {
-      
-    }
-    
-    public function testLastNameValidates()
-    {
-      
-    }
-    
-    public function testAddressValidates()
-    {
-      
-    }
-    
-    public function testEmailValidates()
-    {
-      
     }
 }
