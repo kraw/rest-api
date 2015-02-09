@@ -16,6 +16,8 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var $placeholder = $('#get-list .response-placeholder');
+    
+    $('#get-list .hidden').removeClass('hidden');
 
     $.get('customers')
       .success(function (data, status, response) {
@@ -35,6 +37,8 @@ $(document).ready(function () {
     
     var id = parseInt($('#get-customer-id').val()) || 0;
     var $placeholder = $('#get .response-placeholder');
+    
+    $('#get .hidden').removeClass('hidden');
 
     $.get('customers/' + id)
       .success(function (data, status, response) {
@@ -54,6 +58,8 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var $placeholder = $('#create .response-placeholder');
+    
+    $('#create .hidden').removeClass('hidden');
 
     $.post('customers', customer).success(function (data, status, response) {
         $placeholder.html('<strong>{0} {1}</strong><br>{2}'.format(
@@ -70,6 +76,8 @@ $(document).ready(function () {
     
     var id = parseInt($('#update-customer-id').val()) || 0;
     var $placeholder = $('#update .response-placeholder');
+    
+    $('#update .hidden').removeClass('hidden');
 
     $.ajax({
       url: 'customers/' + id,
@@ -97,6 +105,8 @@ $(document).ready(function () {
     
     var id = parseInt($('#delete-customer-id').val()) || 0;
     var $placeholder = $('#delete .response-placeholder');
+    
+    $('#delete .hidden').removeClass('hidden');
 
     $.ajax({
       url: 'customers/' + id,
@@ -116,6 +126,8 @@ $(document).ready(function () {
     
     var $placeholder = $('#search .response-placeholder');
     var data = {};
+    
+    $('#search .hidden').removeClass('hidden');
     
     if ($('#search-id').val()) data.customerId = $('#search-id').val();
     if ($('#search-lastname').val()) data.lastName = $('#search-lastname').val();

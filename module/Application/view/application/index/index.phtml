@@ -13,7 +13,10 @@
             </div>
             <div class="panel-body">
                 <p><code>GET /customers</code></p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
@@ -36,8 +39,10 @@
 }
 </pre>
                 </p>
-                <p></p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
@@ -50,7 +55,10 @@
             </div>
             <div class="panel-body">
                 <p><code>GET /customers/<input id="get-customer-id" placeholder=":id"></input></code></p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
@@ -76,7 +84,10 @@
 }
 </pre>
                 </p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
@@ -89,7 +100,10 @@
             </div>
             <div class="panel-body">
                 <p><code>DELETE /customers/<input id="delete-customer-id" placeholder=":id"></input></code></p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
@@ -102,12 +116,16 @@
             </div>
             <div class="panel-body">
                 <p><code>GET /customers/search</code></p>
+                <p><strong>Parameters:</strong></p>
                 <p>
-                    <label for="search-id">ID:</label> <input id="search-id" placeholder=":customerId"></input><br>
-                    <label for="search-lastname">Last Name:</label> <input id="search-lastname" placeholder=":lastName"></input><br>
-                    <label for="search-email">Email:</label> <input id="search-email" placeholder=":email"></input>
+                    <label for="search-id">customerId</label> <input id="search-id" placeholder=":customerId"></input><br>
+                    <label for="search-lastname">lastName</label> <input id="search-lastname" placeholder=":lastName"></input><br>
+                    <label for="search-email">email</label> <input id="search-email" placeholder=":email"></input>
                 </p>
-                <p><strong>Response:</strong><pre class="response-placeholder"></pre></p>
+                <p class="response-wrapper hidden">
+                    <strong>Response:</strong>
+                    <pre class="response-placeholder hidden"></pre>
+                </p>
             </div>
         </div>
     </div>
