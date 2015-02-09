@@ -5,13 +5,13 @@ var customer = {
   email: 'foo@email.com'
 };
 
-var updatedCustomer = {
-  firstName: 'Updated First Name'
-};
-
 var accessToken = 'Token token="fooToken123"';
 
 $(document).ready(function () {
+  
+  // Fill textareas on initialization
+  $('#create-payload').html(JSON.stringify(customer, undefined, 2));
+  $('#update-payload').html(JSON.stringify(customer, undefined, 2));
 
   // get a collection
   $('#get-list a').click(function (ev) {
@@ -60,13 +60,22 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var $placeholder = $('#create .response-placeholder');
+    var data = {};
+    
+    try{
+      data = JSON.parse($('#create-payload').val());
+    }
+    catch(e){
+      alert('Incorrect JSON format!');
+      return;
+    }
     
     $('#create .hidden').removeClass('hidden');
       
     $.ajax({
       url: 'customers',
       type: 'post',
-      data: customer,
+      data: data,
       headers: {
           Authentication: accessToken
       },
@@ -90,15 +99,22 @@ $(document).ready(function () {
     ev.preventDefault();
     
     var id = parseInt($('#update-customer-id').val()) || 0;
-    var $placeholder = $('#update .response-placeholder');
+    var $placeholder = $('#update .response-placeholder');    
+    var data = {};
+    
+    try{
+      data = JSON.parse($('#update-payload').val());
+    }
+    catch(e){
+      alert('Incorrect JSON format!');
+      return;
+    }
     
     $('#update .hidden').removeClass('hidden');
 
     $.ajax({
       url: 'customers/' + id,
-      data: $.extend({}, customer, updatedCustomer, {
-        address: new Date ().getTime()
-      }),
+      data: data,
       type: 'PUT',
       headers: {
           Authentication: accessToken
