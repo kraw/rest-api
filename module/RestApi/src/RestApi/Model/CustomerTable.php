@@ -103,6 +103,8 @@ class CustomerTable
         if ($email != null && $email != '') $where['email'] = $email;
         if ($lastName != null && $lastName != '') $where[] = new Expression("lastName LIKE '%$lastName%'");
                 
+        // At this point, I trust that Zend is sanitizing the query for me...
+        // otherwise, I should sanitize it manually before constructing the $where array
         $rowset = $this->tableGateway->select(function (Select $select) use ($where){          
             $select->where($where);
         });
