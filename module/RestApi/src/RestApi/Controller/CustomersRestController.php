@@ -70,7 +70,7 @@ class CustomersRestController extends ParentController
             if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
                 $response->setStatusCode(401);
                 // Let browsers know that Token is the preferred authentication method
-                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
+                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token realm="RestApi"');
                 return $response;
             }
                 
@@ -118,11 +118,13 @@ class CustomersRestController extends ParentController
     {
         $form = new CustomerForm();
         $customer = new Customer();
+        $response = $this->getResponse();
         
         $form->setInputFilter($customer->getInputFilter());
         
         if (!$data)
         {
+            $response->setStatusCode(400); // Bad Request 
             return new JsonModel(array(
                 'error' => 'empty customer data'
             ));
@@ -139,6 +141,7 @@ class CustomersRestController extends ParentController
             ));
         }
      
+        $response->setStatusCode(400); // Bad Request 
         return new JsonModel(array(
             'error' => 'input data is not valid'
         ));
@@ -148,9 +151,12 @@ class CustomersRestController extends ParentController
      * CRUD: Update
      */
     public function update($id, $data)
-    {        
+    {
+        $response = $this->getResponse();
+        
         if (!$data)
         {
+            $response->setStatusCode(400); // Bad Request 
             return new JsonModel(array(
                 'error' => 'empty customer data'
             ));
@@ -161,7 +167,7 @@ class CustomersRestController extends ParentController
         $customer = $this->getCustomerTable()->getCustomer($id);
         
         if ($customer == null) {
-            $response = $this->getResponse();
+            
             $response->setStatusCode(404);
             return $response;
         }
@@ -181,6 +187,7 @@ class CustomersRestController extends ParentController
             ));
         }
      
+        $response->setStatusCode(400); // Bad Request 
         return new JsonModel(array(
             'error' => 'input data is not valid'
         ));
