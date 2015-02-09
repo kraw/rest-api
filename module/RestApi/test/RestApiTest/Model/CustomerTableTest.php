@@ -3,12 +3,12 @@
 namespace RestApiTest\Model;
 
 use Zend\Db\ResultSet\ResultSet;
-use PHPUnit_Framework_TestCase;
 
 use RestApi\Model\Customer;
 use RestApi\Model\CustomerTable;
+use RestApiTest\ParentTestCase;
 
-class CustomerTableTest extends PHPUnit_Framework_TestCase
+class CustomerTableTest extends ParentTestCase
 {
     /**
      * Tests RestApi\Model\CustomerTable::fetchAll()
@@ -41,7 +41,7 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
         $resultSet->initialize(array($customer));
         
         // Mock the table gateway's behavior
-        $mockTableGateway = $this->getMockTableGateway('select');;
+        $mockTableGateway = $this->getMockTableGateway('select');
         
         // Assert that select method will be called with ID 123        
         $mockTableGateway->expects($this->once())
@@ -118,46 +118,6 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
                          
         $customerTable = new CustomerTable($mockTableGateway);
         $customerTable->saveCustomer($customer);
-    }
-    
-    /**
-     * Produces a mock customer with fake data
-     * @return {RestApi\Model\Customer}
-     */
-    private function getMockCustomer()
-    {
-        $customer = new Customer();
-        $customer->exchangeArray($this->getMockCustomerData());
-        
-        return $customer;
-    }
-    
-    /**
-     * Provides fake data for a customer object, so that it is DRY.
-     * @return {Array}
-     */
-    private function getMockCustomerData()
-    {
-        return array(
-            'id' => 123,
-            'lastName' => 'Last Name',
-            'firstName' => 'First Name',
-            'email' => 'foo@email.com',
-            'address' => 'Foo Address'
-        );
-    }
-    
-    /**
-     * Produces a mock table gateway for the selected method
-     * @param {String}
-     * @return {Zend\Db\TableGateway\TableGateway}
-     */
-    private function getMockTableGateway($method = 'select')
-    {
-        if (gettype($method) != 'array'){
-            $method = array($method);
-        }
-        return $this->getMock('Zend\Db\TableGateway\TableGateway', $method, array(), '', false);
     }
     
 }
