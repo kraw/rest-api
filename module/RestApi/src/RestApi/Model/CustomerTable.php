@@ -22,6 +22,7 @@ class CustomerTable
     
     /**
      * CRUD: get a list
+     * @return {Zend\Db\ResultSet\ResultSet}
      */
     public function fetchAll()
     {
@@ -47,6 +48,7 @@ class CustomerTable
     /**
      * CRUD: Create & Update
      * @param {RestApi\Model\Customer}
+     * @return {Int}
      */
     public function saveCustomer(Customer $customer)
     {
@@ -87,6 +89,7 @@ class CustomerTable
     
     /**
      * Extra function to search in the collection
+     * @return {Zend\Db\ResultSet\ResultSet}
      */
     public function search($params)
     {
