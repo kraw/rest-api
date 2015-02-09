@@ -9,6 +9,8 @@ var updatedCustomer = {
   firstName: 'Updated First Name'
 };
 
+var accessToken = 'Token token="fooToken123"';
+
 $(document).ready(function () {
 
   // get a collection
@@ -60,14 +62,27 @@ $(document).ready(function () {
     var $placeholder = $('#create .response-placeholder');
     
     $('#create .hidden').removeClass('hidden');
-
-    $.post('customers', customer).success(function (data, status, response) {
+      
+    $.ajax({
+      url: 'customers',
+      type: 'post',
+      data: customer,
+      headers: {
+          Authentication: accessToken
+      },
+      dataType: 'json',
+      success: function (data, status, response) {
         $placeholder.html('<strong>{0} {1}</strong><br>{2}'.format(
           response.status, 
           response.statusText, 
           JSON.stringify(data, undefined, 2)
         ));
-      });
+      },
+      error: function (error) {
+        $placeholder.html('<strong>{0} {1}</strong>'.format(error.status, error.statusText)); 
+      }
+    });
+    
   });
 
   // update a customer
@@ -85,6 +100,9 @@ $(document).ready(function () {
         address: new Date ().getTime()
       }),
       type: 'PUT',
+      headers: {
+          Authentication: accessToken
+      },
       dataType: "json",
       success: function (data, status, response) {
         $placeholder.html('<strong>{0} {1}</strong><br>{2}'.format(
@@ -111,6 +129,9 @@ $(document).ready(function () {
     $.ajax({
       url: 'customers/' + id,
       type: 'DELETE',
+      headers: {
+          Authentication: accessToken
+      },
       success: function (data, status, response) {
         $placeholder.html('<strong>{0} {1}</strong>'.format(response.status, response.statusText));
       },

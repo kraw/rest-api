@@ -55,21 +55,23 @@ class CustomersRestController extends ParentController
         
         // We matched a collection; test if we allow the particular request method
         if (in_array($method, $this->restrictedMethods)) {
+
+            $tokenHeader = '';            
           
             $header = $request->getHeaders()->get('Authentication');
-          
+            
             if ($header != null) {
                 $tokenHeader = $header->getFieldValue();
+            }
                 
-                // This is not very robust; I should parse the header line instead;
-                // However, and since the result will be the same in this example,
-                // I'm keeping it simple.
-                if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
-                    $response->setStatusCode(401);
-                    // Let browsers know that Token is the preferred authentication method
-                    $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
-                    return $response;
-                }
+            // This is not very robust; I should parse the header line instead;
+            // However, and since the result will be the same in this example,
+            // I'm keeping it simple.
+            if ($tokenHeader != 'Token token="' . $this->restrictedToken . '"') {
+                $response->setStatusCode(401);
+                // Let browsers know that Token is the preferred authentication method
+                $response->getHeaders()->addHeaderLine('WWW-Authenticate', 'Token');
+                return $response;
             }
                 
         }
