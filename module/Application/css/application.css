@@ -1,0 +1,9 @@
+pre.response-placeholder {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#search label {
+    width: 100px;
+    font-weight: normal;
+}
