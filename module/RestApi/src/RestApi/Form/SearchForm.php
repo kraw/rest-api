@@ -5,9 +5,9 @@ namespace RestApi\Form;
 use Zend\Form\Form;
 
 /**
- * This basic representation of a customer form is used for data input validation
+ * This basic representation of a search form is used for data input validation
  */
-class CustomerForm extends Form
+class SearchForm extends Form
 {
     public function __construct()
     {
@@ -18,15 +18,7 @@ class CustomerForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'firstName'
-        ));
-        
-        $this->add(array(
             'name' => 'lastName'
-        ));
-        
-        $this->add(array(
-            'name' => 'address'
         ));
         
         $this->add(array(

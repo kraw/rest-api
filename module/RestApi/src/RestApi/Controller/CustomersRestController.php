@@ -39,13 +39,13 @@ class CustomersRestController extends ParentController
     public function setEventManager(EventManagerInterface $events)
     {
         // The parent will already forbit unallowed methods
-        parent::setEventManager($events);
-        
+        parent::setEventManager($events);        
         $events->attach('dispatch', array($this, 'checkAccess'), 10);
     }
     
     /**
      * @param {Zend\EventManager\EventManagerInterface}
+     * @return {Zend\Http\Response}
      */
     public function checkAccess($e)
     {
@@ -79,6 +79,7 @@ class CustomersRestController extends ParentController
   
     /**
      * CRUD: index (list)
+     * @return {Zend\View\Model\JsonModel}
      */    
     public function getList() 
     {
@@ -95,6 +96,7 @@ class CustomersRestController extends ParentController
  
     /**
      * CRUD: Read
+     * @return {Zend\View\Model\JsonModel|Zend\Http\Response}
      */
     public function get($id)
     {
@@ -113,6 +115,7 @@ class CustomersRestController extends ParentController
  
     /**
      * CRUD: Create
+     * @return {Zend\View\Model\JsonModel}
      */
     public function create($data)
     {
@@ -120,8 +123,7 @@ class CustomersRestController extends ParentController
         $customer = new Customer();
         $response = $this->getResponse();
         
-        $form->setInputFilter($customer->getInputFilter());
-        
+        // Data is required
         if (!$data)
         {
             $response->setStatusCode(400); // Bad Request 
@@ -130,6 +132,8 @@ class CustomersRestController extends ParentController
             ));
         }
         
+        // Validate input data
+        $form->setInputFilter($customer->getInputFilter());
         $form->setData($data);
         
         if ($form->isValid()) {
@@ -149,6 +153,7 @@ class CustomersRestController extends ParentController
  
     /**
      * CRUD: Update
+     * @return {Zend\View\Model\JsonModel|Zend\Http\Response}
      */
     public function update($id, $data)
     {
@@ -202,6 +207,7 @@ class CustomersRestController extends ParentController
  
     /**
      * CRUD: Delete
+     * @return {Zend\Http\Response}
      */
     public function delete($id)
     {
