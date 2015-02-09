@@ -12,8 +12,14 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Front-end controller
+ */
 class IndexController extends AbstractActionController
 {
+    /**
+     * This is the application root, the demo interface
+     */
     public function indexAction()
     {
         return new ViewModel();
