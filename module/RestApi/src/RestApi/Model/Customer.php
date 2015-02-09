@@ -159,6 +159,11 @@ class Customer implements InputFilterAwareInterface
         return $this->inputFilter;
     }
 
+    /**
+     * Sets an input filter so that data model gets validated. 
+     * This one is used for the search form.
+     * @return {Zend\InputFilter\InputFilter}
+     */
     public function getSearchFilter()
     {
         if (!$this->searchFilter) {

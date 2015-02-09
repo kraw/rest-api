@@ -1,11 +1,18 @@
 <?php
 namespace RestApi\Model;
+
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Predicate\Expression;
 
+/**
+ * Maps the DB table through the provided adapter
+ */
 class CustomerTable
 {
+    /**
+     * DB proxy
+     */
     protected $tableGateway;
     
     public function __construct(TableGateway $tableGateway)
@@ -13,12 +20,19 @@ class CustomerTable
         $this->tableGateway = $tableGateway;
     }
     
+    /**
+     * CRUD: get a list
+     */
     public function fetchAll()
     {
         $resultSet = $this->tableGateway->select();
         return $resultSet;
     }
     
+    /**
+     * CRUD: Read
+     * @param {Int}
+     */
     public function getCustomer($id)
     {
         $id  = (int) $id;
@@ -30,6 +44,10 @@ class CustomerTable
         return $row;
     }
     
+    /**
+     * CRUD: Create & Update
+     * @param {RestApi\Model\Customer}
+     */
     public function saveCustomer(Customer $customer)
     {
         $data = array(
@@ -43,7 +61,7 @@ class CustomerTable
         
         if ($id == 0) {
             $this->tableGateway->insert($data);
-            $id = $this->tableGateway->getLastInsertValue(); //Add this line
+            $id = $this->tableGateway->getLastInsertValue();
         } 
         else {
             if ($this->getCustomer($id)) {
@@ -54,14 +72,22 @@ class CustomerTable
             }
         }
         
-        return $id; // Add Return
+        return $id;
     }
     
+    /**
+     * CRUD: Delete
+     * @param {Int}
+     * @return {Int}
+     */
     public function deleteCustomer($id)
     {
         return $this->tableGateway->delete(array('id' => $id));
     }
     
+    /**
+     * Extra function to search in the collection
+     */
     public function search($params)
     {
         $id = $params['id'];

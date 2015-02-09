@@ -60,6 +60,7 @@ class ParentController extends AbstractRestfulController
     /**
      * Return a 405 error if the method (verb) is not allowed
      * @param {Zend\EventManager\EventManagerInterface}
+     * @return {Zend\Http\Response}
      */
     public function checkOptions($e)
     {
@@ -90,6 +91,7 @@ class ParentController extends AbstractRestfulController
     /**
      * The OPTIONS action is automated, so it can safely be placed in the parent.
      * Override $allowedCollectionMethods or $allowedResourceMethods in the child classes to change behavior.
+     * @return {Zend\Http\Response}
      */
     public function options()
     {

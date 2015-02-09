@@ -22,6 +22,7 @@ class CustomerSearchRestController extends ParentController
     
     /**
      * The default action when calling GET on this controller is the search itself
+     * @return {Zend\View\Model\JsonModel}
      */
     public function getList($customerId = null, $lastName = null, $email = null)
     {
