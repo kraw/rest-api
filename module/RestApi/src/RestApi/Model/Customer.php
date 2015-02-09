@@ -18,6 +18,7 @@ class Customer implements InputFilterAwareInterface
     public $email;
     public $address;
     protected $inputFilter;
+    protected $searchFilter;
     
     /**
      * Provided an input array, it copies its content based on the Customer data structure
@@ -156,5 +157,66 @@ class Customer implements InputFilterAwareInterface
         }
 
         return $this->inputFilter;
+    }
+
+    public function getSearchFilter()
+    {
+        if (!$this->searchFilter) {
+            $searchFilter = new InputFilter();
+            $factory = new InputFactory();
+            
+            $searchFilter->add($factory->createInput(array(
+                'name'     => 'id',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'Int'),
+                ),
+            )));
+
+            $searchFilter->add($factory->createInput(array(
+                'name' => 'lastName',
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min'  => 1,
+                            'max'  => 50,
+                        ),
+                    ),
+                ),
+            )));
+
+            $searchFilter->add($factory->createInput(array(
+                'name'     => 'email',
+                'required' => false,
+                'filters'  => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array(                     
+                        'name' => 'EmailAddress', 
+                        'options' => array( 
+                            'encoding' => 'UTF-8', 
+                            'min'      => 5, 
+                            'max'      => 255, 
+                            'messages' => array( 
+                                \Zend\Validator\EmailAddress::INVALID_FORMAT => 'Email address format is invalid' 
+                            ) 
+                        ),
+                    ),
+                ),
+            )));
+            
+            $this->searchFilter = $searchFilter;
+        }
+
+        return $this->searchFilter;
     }
 }

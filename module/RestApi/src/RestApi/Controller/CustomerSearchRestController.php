@@ -2,6 +2,8 @@
 namespace RestApi\Controller;
 
 use RestApi\Controller\ParentController;
+use RestApi\Form\SearchForm;
+use RestApi\Model\Customer;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -26,6 +28,8 @@ class CustomerSearchRestController extends ParentController
         $response = $this->getResponse();
         $headers = $response->getHeaders();
         $request = $this->getRequest();
+        $customer = new Customer();
+        $form = new SearchForm();
         
         // @TODO: This input should be sanitized, since I'm not 100% that ZF2 is doing that
         //        I am skipping this right now to focus on the functionality instead.
@@ -35,8 +39,19 @@ class CustomerSearchRestController extends ParentController
             'email' => $request->getQuery('email')
         );        
         
+        // Validate input data
+        $form->setInputFilter($customer->getSearchFilter());
+        $form->setData($inputData);
+        
+        if (!$form->isValid()) {
+            $response->setStatusCode(400); // Bad Request 
+            return new JsonModel(array(
+                'error' => 'input data is not valid'
+            ));          
+        }
+             
         // Pass the ball on to the customer table to search        
-        $results = $this->getCustomerTable()->search($inputData);
+        $results = $this->getCustomerTable()->search($form->getData());
         $data = array();
         foreach($results as $result) {
             $data[] = $result;

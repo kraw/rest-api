@@ -120,8 +120,7 @@ class CustomersRestController extends ParentController
         $customer = new Customer();
         $response = $this->getResponse();
         
-        $form->setInputFilter($customer->getInputFilter());
-        
+        // Data is required
         if (!$data)
         {
             $response->setStatusCode(400); // Bad Request 
@@ -130,6 +129,8 @@ class CustomersRestController extends ParentController
             ));
         }
         
+        // Validate input data
+        $form->setInputFilter($customer->getInputFilter());
         $form->setData($data);
         
         if ($form->isValid()) {
