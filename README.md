@@ -9,9 +9,10 @@ This is an example to showcase the creation of a basic REST API using the Zend F
 5. Install [phpunit](https://phpunit.de/ if you want to run the automated tests). 
 
 ## Playing around
-A demo interface have been provided from which you will be able to test the REST API. Open the application's root path in your web browser and feel free to try the different options available.
+A demo interface has been provided to test the REST API. Open the application's root path in your web browser and feel free to try the different options available.
 
 ## Some ideas & concerns
+1. This is my very first project with the Zend Framework; I paid attention to follow the recommended best practices, but I have still a lot to learn!
 1. I couldn't make the framework load a `global|local.php` file in the `/module/RestApi/config` folder; I searched on the internet for a while but did not found the issue.
 1. Not implemented HTTP verbs will produce a 405 error code.
 1. The authentication protocol I implemented is very simplistic: the Token header as it is used by the [Ruby on Rails framework](http://api.rubyonrails.org/classes/ActionController/HttpAuthentication/Token.html).
